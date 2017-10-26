@@ -1,0 +1,53 @@
+.block {
+  display: inline-block;
+  width: 200px;
+  margin: 0 10px;
+}
+
+.block_small {
+  display: inline-block;
+  width: 150px;
+  margin: 0 10px;
+}
+
+.block_long {
+  display: inline-block;
+  width: 325px;
+}
+
+.block2{
+  display: inline-block;
+  width: 300px;
+}
+
+.block3{
+  display: inline-block;
+  width: 300px;
+}
+
+.weeknd_raw {
+  width: 200px;
+}
+
+.hybrid_intro {
+  width: 650px;
+  font-size: 12pt;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.error {
+  margin-left: 28px;
+}
+
+.links {
+  font-size: 13pt;
+  margin: 5px 0;
+}
+
+hr {
+  width: 650px;
+  text-align:left; margin: 0 auto 0 0;
+  border-top: 2px dashed #8c8b8b;
+  border-bottom: 2px dashed #fff;
+}

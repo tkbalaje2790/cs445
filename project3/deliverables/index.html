@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Project 3: Gradient-Domain Fusion</title>
+	<meta name="description" content="CS445 Project 3"><meta name="author" content="Vishrut Dixit">
+	<link href="./styles.css" rel="stylesheet" />
+</head>
+<body>
+<h1>Project 3: Gradient-Domain Fusion</h1>
+
+<h2>Part 1: Toy Problem</h2>
+
+<p class="hybrid_intro">
+We first reconstruct an image from its gradient values for practice.
+</br></br>
+For each pixel, then, we have two objectives: </br>
+1. minimize (v(x+1,y)-v(x,y) - (s(x+1,y)-s(x,y)))^2 </br>
+2. minimize (v(x,y+1)-v(x,y) - (s(x,y+1)-s(x,y)))^2 </br>
+Additionally we put a constraint to equate the intensity value of any one pixel of new image to that of the original image. </br>
+3.minimize (v(1,1)-s(1,1))^2 
+</p>
+
+<h4 class="error"> 
+Error: 5.114e-14
+</h4>
+
+<div>
+  <div class="block"><img src="./toy.jpg" width="350px" /></div>
+</div>
+
+
+
+<h2> Part 2: Poisson Blending </h2>
+
+<P class="hybrid_intro">
+The "poisson blending" method outlined by <a href="http://cs.brown.edu/courses/csci1950-g/asgn/proj2/resources/PoissonImageEditing.pdf">Perez</a> was implemented to produce the following images. By ignoring overall intensity and aiming to conserve gradient constraints, the objective can be formulated as a least squares problem. More specifically, pixels within the region being cut-and-pasted (S) should have a similar gradient while pixels on the boundaries of S should match the gradient of the background. Together, these constraints define poisson blending.
+</br></br>
+Note: the source and target images are served as links to avoid cluttering the page. Some of the nicer images were borrowed from <a href="https://unsplash.com/">unsplash</a>.
+</p>
+
+<!-- Favorite Result -->
+<div class="links"> 
+  [<a href='./poisson1_source.jpg'> source </a>, 
+  <a href='./poisson1_target.jpg'> target </a>]
+</div>
+<div>
+  <div class="block_long"><img src="./poisson1_pasted.jpg" width="300px" /></div>
+  <div class="block_long"><img src="./poisson1_blend.jpg" width="300px" /></div>
+</div>
+
+<p class="hybrid_intro"> <strong>Favorite Result:</strong> I found it impressive how poisson blending was able to make the lighting appear more natural for this blend. The picture of the boat was shot in broad daylight, but the color adjustment makes it match nicely with the darker overtones in the target background.</p>
+
+<!-- Result 2 -->
+<div class="links"> 
+  [<a href='./poisson2_source.jpg'> source </a>, 
+  <a href='./poisson2_target.jpg'> target </a>]
+</div>
+<div>
+  <div class="block_long"><img src="./poisson2_pasted.jpg" width="300px" /></div>
+  <div class="block_long"><img src="./poisson2_blend.jpg" width="300px" /></div>
+</div>
+
+<!-- Result 5 -->
+<div class="links"> 
+  [<a href='./poisson5_source.jpg'> source </a>, 
+  <a href='./poisson5_target.jpg'> target </a>]
+</div>
+<div>
+  <div class="block_long"><img src="./poisson5_pasted.jpg" width="300px" /></div>
+  <div class="block_long"><img src="./poisson5_blend.jpg" width="300px" /></div>
+</div>
+
+<!-- Result 4 -->
+<div class="links"> 
+  [<a href='./poisson4_source.jpg'> source </a>, 
+  <a href='./poisson4_target.jpg'> target </a>]
+</div>
+<div>
+  <div class="block_long"><img src="./poisson4_pasted.jpg" width="300px" /></div>
+  <div class="block_long"><img src="./poisson4_blend.jpg" width="300px" /></div>
+</div>
+
+<!-- Failure Case -->
+<div class="links"> 
+  [<a href='./poisson3_source.jpg'> source </a>, 
+  <a href='./poisson3_target.jpg'> target </a>]
+</div>
+<div>
+  <div class="block_long"><img src="./poisson3_pasted.jpg" width="300px" /></div>
+  <div class="block_long"><img src="./poisson3_blend.jpg" width="300px" /></div>
+</div>
+
+<p class="hybrid_intro"> <strong>Failure Case:</strong> the cow didn't blend nicely with the grass. I would guess that the red channel has high intensity values due to the sun on the right-hand side that are skewing the blending response.</p>
+
+<h2>Part 3: Mixed Gradients</h2>
+
+<p class="hybrid_intro">
+"Mixed blending" is a variation of poisson methods that conserves the gradient with the higher magnitude. This results in a more "even" blend between the source and target.
+</p>
+
+<div class="links"> 
+  [<a href='./mixed1_source.jpg'> source </a>, 
+  <a href='./mixed1_target.jpg'> target </a>]
+</div>
+<div>
+  <div class="block_long"><img src="./mixed1_pasted.jpg" width="300px" /></div>
+  <div class="block_long"><img src="./mixed1_blend.jpg" width="300px" /></div>
+</div>
+
+
+
+<h2> Bells and Whistles: Color2Gray</h2>
+
+<p class="hybrid_intro">
+Gradient-domain processing methods can also be used to create a color2gray function that converts an RGB image to grayscale while maintaining color gradients. The results were compared with Matlab's native rgb2gray fucntion. Two constraints were used to achieve this effect: First, the first pixel of the output image must minimize error with the first pixel of the rbg2gray image. Second, all remaining pixels must match the most drastic color gradient (choose the RGB gradient with the highest magnitude). 
+</p>
+
+<div>
+  <div class="block_long"><img src="./color2gray_1.jpg" width="600px" /></div>
+</div>
+<div>
+  <div class="block_long"><img src="./color2gray_2.jpg" width="600px" /></div>
+</div>
+
+<h2> Bells and Whistles: Texture Flattening</h2>
+
+<p class="hybrid_intro">
+Another application of the poisson solver is texture flattening. By creating a mask of sharp features in an image and matching gradients in these sensitive regions, the output image will have a smoothed response along the edges. Some results are shown below to illustrate:
+</p>
+
+<div>
+  <div class="block_long"><img src="./flatten1.jpg" width="600px" /></div>
+</div>
+<div>
+  <div class="block_long"><img src="./flatten2.jpg" width="600px" /></div>
+</div>
+
+<p><br />
+Disclaimer: Some of the images used for this project are not mine.</p>
+
+</body>
+</html>

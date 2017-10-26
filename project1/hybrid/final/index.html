@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Project 1: Hybrid Images</title>
+  <meta name="description" content="CS445 Project 1">
+  <meta name="author" content="Vishrut Dixit">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+  <h1> Project 1: Hybrid Images </h1>
+  <h2> Part 1: Best Result </h2>
+  <p class="hybrid_intro">
+    The following hybrid images were created using the process described in the SIGGRAPH 2006 paper.
+    In this case, the image of <i>The Weeknd</i> was passed through a low-pass gaussian filter while the image of
+    <i>Drake</i> was passed through a high-pass laplacian filter implemented as the impulse filter minus the
+    gaussian filter. This process yields a hybrid image by exploiting our varying sensitivity to frequencies
+    based on distance; higher frequencies dominate our perception at closer distances while we are only able to
+    resolve lower frequencies at further distances.
+  </p>
+  <div>
+    <div class="block">
+      <img src="./drake x weeknd.png" height="400px" />
+    </div>
+    <div class="block2">
+      <img src="./drake.jpg" height="198px"/>
+      <img src="./drake_fft.jpg" height="198px"/>
+    </div>
+    <div class="block2">
+      <img src="./weeknd.jpg" height="198px"/>
+      <img src="./weeknd_fft.jpg" height="198px"/>
+    </div>
+  </div>
+  <div>
+    <div class="block">
+      <img src="./drake_weeknd_fft_2.jpg" width="325px" height="400px" />
+    </div>
+    <div class="block2">
+      <img src="./drake_filtered.jpg" height="198px"/>
+      <img src="./drake_filtered_fft.jpg" height="198px"/>
+    </div>
+    <div class="block2">
+      <img src="./weeknd_filtered.jpg" height="198px"/>
+      <img src="./weeknd_filtered_fft.jpg" height="198px"/>
+    </div>
+  </div>
+  <h2> Part 1: Other Results (federer x rafa & mang0 x fox)</h2>
+  <div>
+    <div class="block">
+      <img src="./federer x nadal.png" height="400px"/>
+    </div>
+    <div class="block">
+      <img src="./mang0 x fox.jpg" height="400px"/>
+    </div>
+  </div>
+
+  <h2> Part 2: Contrast Enhancement </h2>
+  <p class="hybrid_intro">
+    I chose to use histogram equalization to enhance contrast in my images. Specifically, I used the method
+    described in class to compute the frequencies of each intensity between 0 and 255 and equally spread them
+    to create a contrast equalized image. The following picture was taken on Caltech campus in Pasadena.
+  </p>
+  <div class="block">
+    <img src="./pasadena_orig.jpg" width="350px" />
+  </div>
+  <div class="block">
+    <img src="./pasadena_adjusted.jpg" width="350px" />
+  </div>
+
+  <h2> Part 2: Color Enhancement </h2>
+  <p class="hybrid_intro">
+    I chose to use the HSV colorspace to perform color enhancement because the saturation channel
+    corresponds nicely with the "vividness" of an image. In order to increase the values in the <i>S</i> channel
+    while mapping them back to [0,1], I used the nthroot function described in class with n= <strong>1.3</strong>.
+    This function will also prevent oversaturation because it effects higher saturations values less.
+
+    Note: I used a small value of n to prevent the images from looking artificial, but the effect of the enhancement can be seen
+  </p>
+  <div>
+    <div class="block">
+      <img src="./co_orig.jpg" width="350px" />
+    </div>
+    <div class="block">
+      <img src="./co_enhanced.jpg" width="350px" />
+    </div>
+  </div>
+  <div>
+    <div class="block">
+      <img src="./waves_orig.jpg" width="350px" />
+    </div>
+    <div class="block">
+      <img src="./waves_enhanced.jpg" width="350px" />
+    </div>
+  </div>
+  <div>
+    <div class="block">
+      <img src="./rocks_orig.jpg" width="350px" />
+    </div>
+    <div class="block">
+      <img src="./rocks_enhanced.jpg" width="350px" />
+    </div>
+  </div>
+
+  <h2> Part 2: Color Shift </h2>
+  <p class="hybrid_intro">
+    I chose to use the LAB colorspace to perform color shifting. This can be done quite easily by manipulating the <i> a </i>
+    and <i> b </i> channels. To increase the "redness" and "yellowness" of an image, we increase chanels <i> a </i> and <i> b </i>,
+    respectively. In order to keep the adjusted values within the [-128,127] range, we scale the adjustment by the distance from the
+    right boundary using the following formula: <strong> x = x + (127-a)*alpha </strong>. The following images were created using
+    <strong> alpha = .065 </strong>. The following picture is a sunrise in Manhattan at 5am.
+  </p>
+  <div class="block">
+    <img src="./ny_orig.jpg" width="350px" />
+  </div>
+  <div class="block">
+    <img src="./ny_red.jpg" width="350px" />
+  </div>
+  <div class="block">
+    <img src="./ny_yellow.jpg" width="350px" />
+  </div>
+
+  <br>
+  <br>
+
+  Disclaimer: Some of the images used for this project are not mine.
+
+
+</body>
+</html>

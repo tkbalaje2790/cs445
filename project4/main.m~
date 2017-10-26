@@ -1,0 +1,17 @@
+ldr1 = im2uint8(imread('./samples/1:50_small.jpg'));
+ldr2 = im2uint8(imread('./samples/1:10_small.jpg'));
+ldr3 = im2uint8(imread('./samples/10_small.jpg'));
+
+exposures = [1/50 1/10 10];
+
+ldr1_scaled = double(ldr1)/exposures(1);
+max(ldr1_scaled)
+ldr2_scaled = double(ldr2)/exposures(2);
+ldr3_scaled = double(ldr3)/exposures(3);
+
+ldrs = cat(4,ldr1_scaled,ldr2_scaled,ldr3_scaled);
+
+naive_hdr = makehdr_naive(ldrs,exposures);
+
+imagesc(naive_hdr), axis image, colormap default
+

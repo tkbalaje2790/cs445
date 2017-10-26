@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Project 2: Image Quilting</title>
+	<meta name="description" content="CS445 Project 2"><meta name="author" content="Vishrut Dixit">
+	<link href="./styles.css" rel="stylesheet" />
+</head>
+<body>
+<h1>Project 2: Image Quilting</h1>
+
+<h2>Part 1: Quilting</h2>
+
+<p class="hybrid_intro">
+Following the process described by Efros and Freeman, image quilting was implemented incrementally;
+first by taking random tile samples from the texture, then by overlapping tiles that minimize SSD error, and finally
+by "cutting" the overlap regions along the minumum error boundary. Results from random, simple, and cut quilting are shown
+below. Generally, random quilting failed to produce smooth edges but was surprisingly decent in some scenarios. Simple quilting
+stiches together patches from a sample that has a low SSD with the input image. It worked quite well in the textures I tested, but
+sometimes produced sharp boundaries when it struggled to find a good fit. Cut quilting did a better job of blending the overlapping
+regions.
+</p>
+
+
+<div>
+  <div class="block_small"><img src="./bricks.jpg" width="100px" /></div>
+  <div class="block"><img src="./random_quilt1.png" width="200px" /></div>
+  <div class="block"><img src="./overlap_quilt1.png" width="200px" /></div>
+  <div class="block"><img src="./cut_quilt1.png" width="200px" /></div>
+</div>
+
+<div>
+  <div class="block_small"><img src="./text_small.jpg" width="100px" /></div>
+  <div class="block"><img src="./random_quilt2.png" width="200px" /></div>
+  <div class="block"><img src="./overlap_quilt2.png" width="200px" /></div>
+  <div class="block"><img src="./cut_quilt2.png" width="200px" /></div>
+</div>
+
+<div>
+  <div class="block_small"><img src="./stones.jpg" width="100px" /></div>
+  <div class="block"><img src="./random_quilt3.png" width="200px" /></div>
+  <div class="block"><img src="./overlap_quilt3.png" width="200px" /></div>
+  <div class="block"><img src="./cut_quilt3.png" width="200px" /></div>
+</div>
+
+<div>
+  <div class="block_small"><img src="./floor.jpg" width="100px" /></div>
+  <div class="block"><img src="./random_quilt4.png" width="200px" /></div>
+  <div class="block"><img src="./overlap_quilt4.png" width="200px" /></div>
+  <div class="block"><img src="./cut_quilt4.png" width="200px" /></div>
+</div>
+
+<div>
+  <div class="block_small"><img src="./industrial.png" width="100px" /></div>
+  <div class="block"><img src="./random_quilt7.png" width="200px" /></div>
+  <div class="block"><img src="./overlap_quilt7.png" width="200px" /></div>
+  <div class="block"><img src="./cut_quilt7.png" width="200px" /></div>
+</div>
+
+<h2> Seam Finding </h2>
+
+<P class="hybrid_intro">
+Seam finding using the minimum boundary cut builds upon the overlap method but joins the two patches along the minimum error path,
+as illustrated below. The third image in each subplot demonstrates the path through the overlap region that minimizes average error
+across the RGB channels. The seam finding section is passed a "cost" image quantifying the fit of each patch.The process allows
+for further smoothing of error along overlaps, and produces some good results.
+</p>
+
+<div>
+  <div class="block_long"><img src="./seam_finding1.png" width="400px" /></div>
+  <div class="block_long"><img src="./seam_finding3.png" width="400px" /></div>
+</div>
+
+<h2>Part 2: Texture Transfer</h2>
+
+<p class="hybrid_intro">
+The cut quilting implementation can be extended to perform texture transfer, allowing for the application of a sample texture on a target
+image. Efros and Freeman explain that this can be done by adding an additional cost using a correspondance map between the source and target
+images. I used the luminanace channel to compute the cost image (in addition to the previous overlay cost). An alpha parameter was added
+to tune the effects of the two cost terms. 
+</p>
+
+<div>
+  <div class="block_small"><img src="./sketch.jpg" width="145px" /></div>
+  <div class="block"><img src="./vish.jpg" width="200px" /></div>
+  <div class="block"><img src="./vish_transfer2.png" width="200px" /></div>
+</div>
+
+<div>
+  <div class="block_small"><img src="./northface.jpg" width="145px" /></div>
+  <div class="block"><img src="./feynman.jpg" width="200px" /></div>
+  <div class="block"><img src="./red_feynman.png" width="200px" /></div>
+</div>
+
+<!--<div class="block"><img src="./feynman_transfer.png" width="350px" /></div> -->
+
+<p><br />
+Disclaimer: Some of the images used for this project are not mine.</p>
+
+</body>
+</html>

@@ -1,5 +1,4 @@
 function latlon = mirrorball2latlon( mirrorball_hdr )
-    offset = pi/2; % offset used later to center image
 
     mirrorball_hdr = im2double(mirrorball_hdr);
     [rows, cols, dim] = size(mirrorball_hdr);
@@ -24,9 +23,7 @@ function latlon = mirrorball2latlon( mirrorball_hdr )
     theta_ball = acos(R(:,:,2)); % Get the theta coord for this pixel
     phi_ball = atan2(R(:,:,3), R(:,:,1)); % Get the phi coord for this pixel
     phi_ball = phi_ball.* ~isnan(phi_ball); % Remove any NaN entries
-    % Offset phi values
-    phi_ball = phi_ball+offset;
-    phi_ball(phi_ball > pi) = phi_ball(phi_ball > pi) -2*pi;
+    phi_ball = (phi_ball+pi/2);
     
     % Reshape matrices
     phi_ball = reshape(phi_ball, rows*cols, 1);

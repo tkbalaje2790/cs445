@@ -1,47 +1,37 @@
-function [ hdr ] = makehdr_selective(ldr1, ldr2, ldr3, exp1, exp2, exp3)
+function [ hdr ] = makehdr_selective(ldrs,exps)
 %MAKEHDR_SELECTIVE 
-    [rows, cols, dim] = size(ldr1);
+    [rows, cols, dim] = size(ldrs(:,:,:,1));
+    
+    num_images = size(ldrs,4);
+    ldrs = im2double(ldrs);
 
-    ldr1 = im2double(ldr1);
-    ldr2 = im2double(ldr2);
-    ldr3 = im2double(ldr3);
-
-    % Naive averaging of multiple ldr images
-    ldr1_scaled = ldr1./exp1;
-    ldr2_scaled = ldr2./exp2;
-    ldr3_scaled = ldr3./exp3;
+    % Scaling into same intensity domain
+    for i = 1:num_images
+        ldrs_scaled(:,:,:,i) = ldrs(:,:,:,i)./exps(i);
+    end
     
     hdr = zeros(rows, cols, dim, 'double');
     % Mean ldrs
     for r = 1:rows
         for c = 1:cols
-            weight1 = 0;
-            weight2 = 0;
-            weight3 = 0;
+            weights = zeros(1,num_images);
             for d = 1:dim
-                 weight1 = weight1 + (0.65-abs(ldr1(r,c,d)-0.5))/0.5;
-                 weight2 = weight2 + (0.65-abs(ldr2(r,c,d)-0.5))/0.5;
-                 weight3 = weight3 + (0.65-abs(ldr3(r,c,d)-0.5))/0.5;
+                for i = 1:num_images
+                    weights(i) = weights(i) + (0.65-abs(ldrs(r,c,d,i)-0.5))/0.5;
+                end
             end
-            weight1 = weight1/3;
-            weight2 = weight2/3;
-            weight3 = weight3/3;
-            weight1 = (1-(1-weight1)^2);
-            weight2 = (1-(1-weight2)^2);
-            weight3 = (1-(1-weight3)^2);
-            th = 0.005;
+            for i = 1:num_images
+                weights(i) = weights(i)/num_images;
+                weights(i) = (1-(1-weights(i))^2);
+            end
             for d = 1:dim
-                if weight1 < th && weight2 < th && weight3 < th
-%                     hdr(r,c,d) = (ldr1_scaled(r,c,d) + ldr2_scaled(r,c,d) + ldr3_scaled(r,c,d))/3;
+                for i = 1:num_images
+                    hdr(r,c,d) = hdr(r,c,d) + weights(i)*ldrs_scaled(r,c,d,i);
                 end
-                hdr(r,c,d) = hdr(r,c,d) + (weight1*ldr1_scaled(r,c,d) + weight2*ldr2_scaled(r,c,d) + weight3*ldr3_scaled(r,c,d))/(weight1 + weight2 + weight3);
-                if weight1 < th && weight2 < th && weight3 < th
-%                     hdr(r,c,d) = hdr(r,c,d)/2;
-                end
+                hdr(r,c,d) = hdr(r,c,d)/sum(weights);
             end
         end
     end
-   
     
     % Rescale
     hdr(:,:,1) = 255 * mat2gray(hdr(:,:,1));

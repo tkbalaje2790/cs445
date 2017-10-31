@@ -1,6 +1,6 @@
 function cubemap = mirrorball2cubemap( mirrorball_hdr )
-    offset1 = pi/2; % offsets used later to center images
-    offset2 = pi/2;
+%MIRRORBALL2CUBEMAP Converts a mirrorball image to a cubemap projection
+    offset = pi/2; % offsets used later to center images
     
     cmap = parula(256);
 
@@ -25,22 +25,24 @@ function cubemap = mirrorball2cubemap( mirrorball_hdr )
     theta_ball = acos(R(:,:,2)); % Get the theta coord for this pixel
     phi_ball = atan2(R(:,:,3), R(:,:,1)); % Get the phi coord for this pixel
     % Offset phi values
-    phi_ball = phi_ball + offset1;
+    phi_ball = phi_ball + offset;
     phi_ball(phi_ball > pi) = phi_ball(phi_ball > pi) - 2*pi;
     phi_ball(phi_ball < -pi) = phi_ball(phi_ball < -pi) + 2*pi;
-%     Rim = reshape(R, rows,cols,3);
-%     figure(9),imagesc(Rim), axis image, colormap default
+    
+    % Image display/write
+    Rim = reshape(R, rows,cols,3);
+    figure(9),imagesc(Rim), axis image, colormap default
 %     imwrite(Rim, './results/reflection_mb.jpg');
-%     Nim = reshape(N, rows,cols,3);
-%     figure(9),imagesc(Nim), axis image, colormap default
+    Nim = reshape(N, rows,cols,3);
+    figure(9),imagesc(Nim), axis image, colormap default
 %     imwrite(Nim, './results/normal_mb.jpg');
-%     I = mask.*phi_ball - pi*~mask;
-%     figure(5),imagesc(I), axis image, colormap default
+    I = mask.*phi_ball - pi*~mask;
+    figure(5),imagesc(I), axis image, colormap default
 %     m = I - min(I(:));
 %     m = max(m(:));
 %     imwrite(255*(I-min(I(:))) ./ m, cmap, './results/phi_mb.jpg');
-%     I = mask.*theta_ball;
-%     figure(6),imagesc(I), axis image, colormap default
+    I = mask.*theta_ball;
+    figure(6),imagesc(I), axis image, colormap default
 %     m = I - min(I(:));
 %     m = max(m(:));
 %     imwrite( 255*(I-min(I(:))) ./ m, cmap, './results/theta_mb.jpg');
@@ -96,25 +98,26 @@ function cubemap = mirrorball2cubemap( mirrorball_hdr )
     N = cat(4, X, Y, Z);
     Nim = reshape(N, size(X,1),size(X,2),3);
     figure(10),imagesc(Nim), axis image, colormap default
-    imwrite(Nim, './results/normal_cm.jpg');
+%     imwrite(Nim, './results/normal_cm.jpg');
    
     theta_cm = acos(Y); % Get the theta coord for this pixel
     phi_cm = atan2(Z, X); % Get the phi coord for this pixel
     phi_cm = phi_cm .* ~isnan(phi_cm); % Remove any NaN entries
-    phi_cm = phi_cm+offset2;
+    phi_cm = phi_cm+offset;
     phi_cm(phi_cm > pi) = phi_cm(phi_cm > pi) -2*pi;
     phi_cm(phi_cm < -pi) = phi_cm(phi_cm < -pi) +2*pi;
     phi_cm(phi_cm == 0) = pi;
     phi_cm(maskcm.*phi_cm == 0) = 2*pi;
     
-%     I = maskcm.*phi_cm;
-%     figure(7),imagesc(I), axis image, colormap default
+    % Image display/write
+    I = maskcm.*phi_cm;
+    figure(7),imagesc(I), axis image, colormap default
 %     m = I - min(I(:));
 %     m = max(m(:));
 %     imwrite(255*(I-min(I(:))) ./ m, cmap, './results/phi_cm.jpg');
-%     
-%     I = maskcm.*theta_cm + ~maskcm.*pi/2;
-%     figure(8),imagesc(I), axis image, colormap default
+    
+    I = maskcm.*theta_cm + ~maskcm.*pi/2;
+    figure(8),imagesc(I), axis image, colormap default
 %     m = I - min(I(:));
 %     m = max(m(:));
 %     imwrite(255*(I-min(I(:))) ./ m, cmap, './results/theta_cm.jpg');

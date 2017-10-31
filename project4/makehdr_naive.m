@@ -1,5 +1,5 @@
 function hdr = makehdr_naive(ldr1, ldr2, ldr3, exp1, exp2, exp3)
-%MAKEHDR_NAIVE
+%MAKEHDR_NAIVE naive merging of ldr images
 
     ldr1 = im2double(ldr1);
     ldr2 = im2double(ldr2);

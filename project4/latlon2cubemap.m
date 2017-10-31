@@ -1,25 +1,26 @@
 function cubemap = latlon2cubemap( )
-    offset = -pi/2;
+%LATLON2CUBEMAP Converts an equilateral image to a cubemap projection
+    offset1 = -pi;
+    offset2 = pi/2;
     cmap = parula(256);
 
-    equirectangular = im2double(imread('./results/equirectangular.jpg'));
+    equirectangular = im2double(imread('./results/example.png'));
     [rows, cols, dim] = size(equirectangular);
-    
-    [phis, thetas] = meshgrid([-pi:2*pi/(cols-1):pi], 0:pi/(rows-1):pi);
+    [phis, thetas] = meshgrid(pi:-2*pi/(cols-1):-pi, 0:pi/(rows-1):pi);
+    phis = phis + offset1;
+    phis(phis > pi) = phis(phis > pi) - 2*pi;
+    phis(phis < -pi) = phis(phis < -pi) + 2*pi;
     I = phis;
-    m = I - min(I(:));
-    m = max(m(:));
-    imwrite(255*(I-min(I(:))) ./ m, cmap, './results/phi_eq.jpg');
+%     m = I - min(I(:));
+%     m = max(m(:));
+%     imwrite(255*(I-min(I(:))) ./ m, cmap, './results/phi_eq.jpg');
     figure(2),imagesc(I), axis image, colormap default
     I = thetas;
-    m = I - min(I(:));
-    m = max(m(:));
-    imwrite(255*(I-min(I(:))) ./ m, cmap, './results/theta_eq.jpg');
+%     m = I - min(I(:));
+%     m = max(m(:));
+%     imwrite(255*(I-min(I(:))) ./ m, cmap, './results/theta_eq.jpg');
     figure(3),imagesc(I), axis image, colormap default
     phi_er = reshape(phis, rows*cols, 1);
-    phi_er = phi_er+offset;
-    phi_er(phi_er > pi) = phi_er(phi_er > pi) -2*pi;
-    phi_er(phi_er < -pi) = phi_er(phi_er < -pi) +2*pi;
     theta_er = reshape(thetas, rows*cols, 1);
     equirectangular = reshape(equirectangular, rows*cols, 1, dim);
     
@@ -69,6 +70,9 @@ function cubemap = latlon2cubemap( )
     theta_cm = acos(Y); % Get the theta coord for this pixel
     phi_cm = atan2(Z, X); % Get the phi coord for this pixel
     phi_cm = phi_cm .* ~isnan(phi_cm); % Remove any NaN entries
+    phi_cm = phi_cm + offset2;
+    phi_cm(phi_cm > pi) = phi_cm(phi_cm > pi) - 2*pi;
+    phi_cm(phi_cm < -pi) = phi_cm(phi_cm < -pi) + 2*pi;
     figure(7),imagesc(maskcm.*phi_cm), axis image, colormap default
     figure(8),imagesc(maskcm.*theta_cm + ~maskcm.*pi/2), axis image, colormap default
     

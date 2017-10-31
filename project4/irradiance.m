@@ -1,6 +1,6 @@
 function [out] = irradiance(img, exposure)
 % generates the log irradiance image for naive and selective LDR merging
-% g(Z) = ln(t) + ln(R)
+% ln(Z) = ln(t) + ln(R)
 
 [y,x,z] = size(img);
     

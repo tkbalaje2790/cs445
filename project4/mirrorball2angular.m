@@ -1,4 +1,4 @@
-function angular = miirrorball2cubemap( mirrorball_hdr )
+function angular = mirrorball2angular( mirrorball_hdr )
 %MIRRORBALL2ANGULAR Converts an mirrorball image to an angular  projection
     offset = pi/2;
     cmap = parula(256);

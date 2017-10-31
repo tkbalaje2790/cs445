@@ -10,8 +10,6 @@ ldr5 = im2uint8(imread('./samples/new/30.jpg'));
 
 exps = [2 4 8 15 30];
 
-
-
 %% LDR Merging 
 
 ldrs = cat(4, ldr1, ldr2, ldr3, ldr4, ldr5);
@@ -80,8 +78,8 @@ end
 
 %% Response function estimation
 
-hdr_gsolve = makehdr_gsolve(ldrs,exps);
-figure(1), imagesc(hdr_gsolve), axis image, colormap default;
+%hdr_gsolve = makehdr_gsolve(ldrs,exps);
+%figure(1), imagesc(hdr_gsolve), axis image, colormap default;
 
 %% Graphing
 

@@ -4,7 +4,7 @@ function [ hdr ] = makehdr_gsolve(ldrs,exps)
 
 [y,x,z] = size(ldrs(:,:,:,1));
 
-hdr = zeros(y,x,z,'double');
+hdr = zeros(y,x,z,'uint8');
 num_images = size(ldrs,4);
 
 ldrs_scaled = im2double(ldrs);
@@ -15,7 +15,7 @@ for i = 1:num_images
 end
 
 %randomly sample pixels
-n = 100;
+n = 200;
 y = randperm(y);
 x = randperm(x);
 
@@ -45,12 +45,8 @@ for d = 1:3
                 denom = denom + w(z);
             end
             lR = numer/denom;
-            [~, index] = min(abs(g-exp(lR)));
-            %disp(index-1);
+            [~, index] = min(abs(g-(lR)));
             hdr(r,c,d) = index-1;
         end
     end
 end
-
-hdr = uint8(hdr);
-

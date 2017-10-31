@@ -2,11 +2,12 @@ function hdr = makehdr_naive(ldrs, exps)
 %MAKEHDR_NAIVE
 
     num_images = size(ldrs,4);
+    
+    ldrs = im2double(ldrs);
 
     % Scaling into same intensity domain
     for i = 1:num_images
-        ldr_scaled = im2double(ldrs(:,:,:,i));
-        ldrs(:,:,:,i) = ldr_scaled./exps(i);
+        ldrs(:,:,:,i) = ldrs(:,:,:,i)./exps(i);
     end
     
     % Mean ldrs

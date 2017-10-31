@@ -2,18 +2,27 @@ clear;
 close all;
 colormap(parula);
 
-ldr1 = im2uint8(imread('./samples/1:50.jpg'));
-ldr2 = im2uint8(imread('./samples/1:10.jpg'));
-ldr3 = im2uint8(imread('./samples/10.jpg'));
+ldr1 = im2uint8(imread('./samples/new/2.jpg'));
+ldr2 = im2uint8(imread('./samples/new/4.jpg'));
+ldr3 = im2uint8(imread('./samples/new/8.jpg'));
+ldr4 = im2uint8(imread('./samples/new/15.jpg'));
+ldr5 = im2uint8(imread('./samples/new/30.jpg'));
 
-exps = [1/50 1/10 10];
+exps = [2 4 8 15 30];
+
+
 
 %% LDR Merging 
 
-ldrs = cat(4, ldr1, ldr2, ldr3);
+ldrs = cat(4, ldr1, ldr2, ldr3, ldr4, ldr5);
 
-naive_hdr = makehdr_naive(ldrs,exps);
-selective_hdr = makehdr_selective(ldrs, exps);
+%naive_hdr = makehdr_naive(ldrs,exps);
+%selective_hdr = makehdr_selective(ldrs, exps);
+gsolve_hdr = makehdr_gsolve(ldrs,exps);
+
+%figure(1),imagesc(naive_hdr), axis image, colormap default
+%figure(2),imagesc(selective_hdr), axis image, colormap default
+figure(3),imagesc(gsolve_hdr), axis image, colormap default
 
 %% Irridiance Calculations
 

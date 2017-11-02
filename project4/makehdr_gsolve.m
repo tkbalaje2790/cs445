@@ -28,13 +28,15 @@ for d = 1:3
         end
     end
     
+    figure(4), hold on
+    
     [g,lE] = gsolve(Z,B,l,w);
     if d == 1
-       figure(4), plot(g(1:255), 1:255, 'r-', 'LineWidth',3), axis square, colormap default
+       plot(g(1:255), 1:255, 'r-', 'LineWidth',3), axis square, colormap default
     elseif d == 2
-       figure(5), plot(g(1:255), 1:255, 'g-', 'LineWidth',3), axis square, colormap default
+       plot(g(1:255), 1:255, 'g-', 'LineWidth',3), axis square, colormap default
     else
-       figure(6), plot(g(1:255), 1:255, 'b-', 'LineWidth',3), axis square, colormap default
+       plot(g(1:255), 1:255, 'b-', 'LineWidth',3), axis square, colormap default
     end
     
     %reconstructing

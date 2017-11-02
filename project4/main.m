@@ -11,20 +11,20 @@ colormap(parula);
 % 
 % ldrs = cat(4, ldr1, ldr2, ldr3, ldr4, ldr5);
 
-ldr1 = im2uint8(imread('./samples/new/2.jpg'));
-ldr2 = im2uint8(imread('./samples/new/4.jpg'));
-ldr3 = im2uint8(imread('./samples/new/8.jpg'));
-ldr4 = im2uint8(imread('./samples/new/15.jpg'));
-ldr5 = im2uint8(imread('./samples/new/30.jpg'));
-exps = [2 4 8 15 30];
+% ldr1 = im2uint8(imread('./samples/new/2.jpg'));
+% ldr2 = im2uint8(imread('./samples/new/4.jpg'));
+% ldr3 = im2uint8(imread('./samples/new/8.jpg'));
+% ldr4 = im2uint8(imread('./samples/new/15.jpg'));
+% ldr5 = im2uint8(imread('./samples/new/30.jpg'));
+% exps = [2 4 8 15 30];
 
-% ldr1 = im2uint8(imread('./samples/angle1/1:30.jpg'));
-% ldr2 = im2uint8(imread('./samples/angle1/1:15.jpg'));
-% ldr3 = im2uint8(imread('./samples/angle1/1:8.jpg'));
-% ldr4 = im2uint8(imread('./samples/angle1/1:4.jpg'));
-% ldr5 = im2uint8(imread('./samples/angle1/1:2.jpg'));
+ldr1 = im2uint8(imread('./samples/angle1/1:30.jpg'));
+ldr2 = im2uint8(imread('./samples/angle1/1:15.jpg'));
+ldr3 = im2uint8(imread('./samples/angle1/1:8.jpg'));
+ldr4 = im2uint8(imread('./samples/angle1/1:4.jpg'));
+ldr5 = im2uint8(imread('./samples/angle1/1:2.jpg'));
 
-% exps = [1/30 1/15 1/8 1/4 1/2];
+exps = [1/30 1/15 1/8 1/4 1/2];
 
 ldrs = cat(4, ldr1, ldr2, ldr3, ldr4, ldr5);
 
@@ -47,6 +47,7 @@ figure(3),imagesc(gsolve_hdr), axis image, colormap default
 hdrwrite(gsolve_hdr, './results/gsolve_hdr.hdr');
 imwrite(tonemap(gsolve_hdr), './results/gsolve_hdr.jpg');
 
+%% Irradiance scaling
 
 irr1 = irradiance(ldr1, exps(1));
 irr2 = irradiance(ldr2, exps(2));

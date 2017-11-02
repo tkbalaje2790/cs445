@@ -46,7 +46,7 @@ for d = 1:3
                 numer = numer + w(z)*(g(z+1) - B(j));   
                 denom = denom + w(z);
             end
-            hdr_irr(r,c,d) = numer/denom;
+            hdr_irr(r,c,d) = exp(numer/denom);
 %           [~, index] = min(abs(g-hdr_irr(r,c, d)));
 %           hdr(r,c,d) = index-1;
         end

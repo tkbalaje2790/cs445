@@ -1,4 +1,4 @@
-function [ hdr_irr_scaled , hdr_irr] = makehdr_gsolve(ldrs,exps)
+function [ hdr_irr] = makehdr_gsolve(ldrs,exps)
 % Find the response function and create hdr image
 % g(Z) = ln(t) + ln(R)
 
@@ -15,9 +15,10 @@ randCols = randperm(cols, n);
 Z = zeros(n, num_images);
 B = log(exps);
 l = 10;
-w = @(z) double(128-abs(z-128));
+w = @(z) double(129-abs(z-128));
 
 hdr_irr = zeros(rows,cols, dim);
+hdr_irr_scaled = zeros(rows,cols, dim);
 
 for d = 1:3
     %finding response function
@@ -46,22 +47,16 @@ for d = 1:3
                 denom = denom + w(z);
             end
             hdr_irr(r,c,d) = numer/denom;
-%           [~, index] = min(abs(g-hdr_irr(r,c, d)));
-%           hdr(r,c,d) = index-1;
         end
     end
-    I = hdr_irr(:,:,d);
-    minel = min(I(:));
-    offsetI = I-minel;
-    hdr_irr_scaled(:,:,d) = offsetI/max(offsetI(:));
-%     I = double(hdr(:,:, d));
+%     I = hdr_irr(:,:,d);
 %     minel = min(I(:));
 %     offsetI = I-minel;
-%     hdr(:,:,d) = 255*offsetI/max(offsetI(:));
+%     hdr_irr_scaled(:,:,d) = offsetI/max(offsetI(:));
     
 end
 cmap = jet(256);
 I =255*mat2gray(mean(hdr_irr,3));
 imwrite(I, cmap, './results/irradiance_map.jpg');
 figure(7), imagesc(I), axis image, colormap parula
-    
+hdr_irr = exp(hdr_irr);    

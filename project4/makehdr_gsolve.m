@@ -30,12 +30,13 @@ for d = 1:3
     
     [g,lE] = gsolve(Z,B,l,w);
     if d == 1
-       figure(4), plot(g(1:255), 1:255), axis square, colormap default
+       figure(4), plot(g(1:255), 1:255, 'r-', 'LineWidth',3), axis square, colormap default
     elseif d == 2
-       figure(5), plot(g(1:255), 1:255), axis square, colormap default
+       figure(5), plot(g(1:255), 1:255, 'g-', 'LineWidth',3), axis square, colormap default
     else
-       figure(6), plot(g(1:255), 1:255), axis square, colormap default
+       figure(6), plot(g(1:255), 1:255, 'b-', 'LineWidth',3), axis square, colormap default
     end
+    
     %reconstructing
     for r = 1:rows
         for c = 1:cols
@@ -55,8 +56,8 @@ for d = 1:3
 %     hdr_irr_scaled(:,:,d) = offsetI/max(offsetI(:));
     
 end
+hdr_irr = exp(hdr_irr);    
 cmap = jet(256);
 I =255*mat2gray(mean(hdr_irr,3));
 imwrite(I, cmap, './results/irradiance_map.jpg');
 figure(7), imagesc(I), axis image, colormap parula
-hdr_irr = exp(hdr_irr);    

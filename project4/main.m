@@ -50,69 +50,80 @@ irr2 = irradiance(ldr2, exps(2));
 irr3 = irradiance(ldr3, exps(3));
 irr4 = irradiance(ldr4, exps(4));
 irr5 = irradiance(ldr5, exps(5));
+
 irr6 = irradiance(naive_hdr,1);
 irr7 = irradiance(selective_hdr,1);
 irr8 = irradiance(gsolve_hdr, 1);
 
-%filter out inf values from log(0)g
-irr1_filtered = irr1 .* ~isinf(irr1);
-irr2_filtered = irr2 .* ~isinf(irr2);
-irr3_filtered = irr3 .* ~isinf(irr3);
-irr4_filtered = irr4 .* ~isinf(irr4);
-irr5_filtered = irr5 .* ~isinf(irr5);
-irr6_filtered = irr6 .* ~isinf(irr6);
-irr7_filtered = irr7 .* ~isinf(irr7);
-irr8_filtered = irr8 .* ~isinf(irr8);
+irrs = cat(4,irr1,irr2,irr3,irr4,irr5);
 
-min1 = min(irr1_filtered(:));
-min2 = min(irr2_filtered(:));
-min3 = min(irr3_filtered(:));
-min4 = min(irr4_filtered(:));
-min5 = min(irr5_filtered(:));
-min6 = min(irr6_filtered(:));
-min7 = min(irr7_filtered(:));
-min8 = min(irr8_filtered(:));
+naive_irr = scale_irradiance(irrs,irr6);
+selective_irr = scale_irradiance(irrs,irr7);
+gsolve_irr = scale_irradiance(irrs,irr8);
 
-max1 = max(irr1(:));
-max2 = max(irr2(:));
-max3 = max(irr3(:));
-max4 = max(irr4(:));
-max5 = max(irr5(:));
-max6 = max(irr6(:));
-max7 = max(irr7(:));
-max8 = max(irr8(:));
-
-%overall min/max across all exposures
-min_val = min([min1 min2 min3 min4 min5 min6 min7 min8]);
-max_val = max([max1 max2 max3 max4 max5 max6 max7 max8]);
-
-%scale
-[y,x,z] = size(irr1);
-
-for r = 1:y
-    for c = 1:x
-        for d = 1:z
-            irr1(r,c,d) = (irr1(r,c,d) - min_val) / (max_val-min_val);
-            irr2(r,c,d) = (irr2(r,c,d) - min_val) / (max_val-min_val);
-            irr3(r,c,d) = (irr3(r,c,d) - min_val) / (max_val-min_val);
-            irr4(r,c,d) = (irr4(r,c,d) - min_val) / (max_val-min_val);
-            irr5(r,c,d) = (irr5(r,c,d) - min_val) / (max_val-min_val);
-            irr6(r,c,d) = (irr6(r,c,d) - min_val) / (max_val-min_val);
-            irr7(r,c,d) = (irr7(r,c,d) - min_val) / (max_val-min_val);
-            irr8(r,c,d) = (irr8(r,c,d) - min_val) / (max_val-min_val);
-        end
-    end 
-end
+% %filter out -inf values from log(0)g
+% irr1_filtered = irr1 .* ~isinf(irr1);
+% irr2_filtered = irr2 .* ~isinf(irr2);
+% irr3_filtered = irr3 .* ~isinf(irr3);
+% irr4_filtered = irr4 .* ~isinf(irr4);
+% irr5_filtered = irr5 .* ~isinf(irr5);
+% irr6_filtered = irr6 .* ~isinf(irr6);
+% irr7_filtered = irr7 .* ~isinf(irr7);
+% irr8_filtered = irr8 .* ~isinf(irr8);
+% 
+% min1 = min(irr1_filtered(:));
+% min2 = min(irr2_filtered(:));
+% min3 = min(irr3_filtered(:));
+% min4 = min(irr4_filtered(:));
+% min5 = min(irr5_filtered(:));
+% min6 = min(irr6_filtered(:));
+% min7 = min(irr7_filtered(:));
+% min8 = min(irr8_filtered(:));
+% 
+% max1 = max(irr1(:));
+% max2 = max(irr2(:));
+% max3 = max(irr3(:));
+% max4 = max(irr4(:));
+% max5 = max(irr5(:));
+% max6 = max(irr6(:));
+% max7 = max(irr7(:));
+% max8 = max(irr8(:));
+% 
+% %overall min/max across all exposures
+% min_val = min([min1 min2 min3 min4 min5 min6 min7 min8]);
+% max_val = max([max1 max2 max3 max4 max5 max6 max7 max8]);
+% 
+% %scale
+% [y,x,z] = size(irr1);
+% 
+% for r = 1:y
+%     for c = 1:x
+%         for d = 1:z
+%             irr1(r,c,d) = (irr1(r,c,d) - min_val) / (max_val-min_val);
+%             irr2(r,c,d) = (irr2(r,c,d) - min_val) / (max_val-min_val);
+%             irr3(r,c,d) = (irr3(r,c,d) - min_val) / (max_val-min_val);
+%             irr4(r,c,d) = (irr4(r,c,d) - min_val) / (max_val-min_val);
+%             irr5(r,c,d) = (irr5(r,c,d) - min_val) / (max_val-min_val);
+%             irr6(r,c,d) = (irr6(r,c,d) - min_val) / (max_val-min_val);
+%             irr7(r,c,d) = (irr7(r,c,d) - min_val) / (max_val-min_val);
+%             irr8(r,c,d) = (irr8(r,c,d) - min_val) / (max_val-min_val);
+%         end
+%     end 
+% end
 
 figure(1)
-subplot(2,4,1), imagesc(irr1), axis image, colormap jet
-subplot(2,4,2), imagesc(irr2), axis image, colormap jet
-subplot(2,4,3), imagesc(irr3), axis image, colormap jet
-subplot(2,4,4), imagesc(irr4), axis image, colormap jet
-subplot(2,4,5), imagesc(irr5), axis image, colormap jet
-subplot(2,4,6), imagesc(irr6), axis image, colormap jet
-subplot(2,4,7), imagesc(irr7), axis image, colormap jet
-subplot(2,4,8), imagesc(irr8), axis image, colormap jet
+subplot(1,5,1), imagesc(irr1), axis image, colormap jet
+subplot(1,5,2), imagesc(irr2), axis image, colormap jet
+subplot(1,5,3), imagesc(irr3), axis image, colormap jet
+subplot(1,5,4), imagesc(irr4), axis image, colormap jet
+subplot(1,5,5), imagesc(irr5), axis image, colormap jet
+
+figure(100)
+subplot(1,3,1), imagesc(naive_irr), axis image, colormap jet
+subplot(1,3,2), imagesc(selective_irr), axis image, colormap jet
+subplot(1,3,3), imagesc(gsolve_irr), axis image, colormap jet
+
+
 
 
 %% Graphing

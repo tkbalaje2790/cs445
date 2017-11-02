@@ -2,9 +2,14 @@ clear;
 close all;
 colormap(parula);
 
-% ldr1 = im2uint8(imread('./samples/1:50_small.jpg'));
-% ldr2 = im2uint8(imread('./samples/1:10_small.jpg'));
-% ldr3 = im2uint8(imread('./samples/10_small.jpg'));
+% ldr1 = im2uint8(imread('./samples/table/1_80_ball.jpg'));
+% ldr2 = im2uint8(imread('./samples/table/1_30_ball.jpg'));
+% ldr3 = im2uint8(imread('./samples/table/1_13_ball.jpg'));
+% ldr4 = im2uint8(imread('./samples/table/4_ball.jpg'));
+% ldr5 = im2uint8(imread('./samples/table/8_ball.jpg'));
+% exps = [1/80 1/30 1/13 4 8];
+% 
+% ldrs = cat(4, ldr1, ldr2, ldr3, ldr4, ldr5);
 
 ldr1 = im2uint8(imread('./samples/new/2.jpg'));
 ldr2 = im2uint8(imread('./samples/new/4.jpg'));
@@ -14,17 +19,26 @@ ldr5 = im2uint8(imread('./samples/new/30.jpg'));
 
 exps = [2 4 8 15 30];
 
-%% LDR Merging 
-
 ldrs = cat(4, ldr1, ldr2, ldr3, ldr4, ldr5);
 
+%% LDR Merging 
+
 naive_hdr = makehdr_naive(ldrs,exps);
+naive_hdr = double(naive_hdr);
 selective_hdr = makehdr_selective(ldrs, exps);
+selective_hdr = double(selective_hdr);
 gsolve_hdr = makehdr_gsolve(ldrs,exps);
+gsolve_hdr = double(gsolve_hdr);
 
 figure(1),imagesc(naive_hdr), axis image, colormap default
+imwrite(tonemap(naive_hdr), './results/naive_hdr.jpg');
+hdrwrite(naive_hdr, './results/naive_hdr.hdr');
 figure(2),imagesc(selective_hdr), axis image, colormap default
+imwrite(tonemap(selective_hdr), './results/selective_hdr.jpg');
+hdrwrite(selective_hdr, './results/selective_hdr.hdr');
 figure(3),imagesc(gsolve_hdr), axis image, colormap default
+hdrwrite(gsolve_hdr, './results/gsolve_hdr.hdr');
+imwrite(tonemap(gsolve_hdr), './results/gsolve_hdr.jpg');
 
 %% Irridiance Calculations
 
@@ -72,18 +86,13 @@ for r = 1:y
     end 
 end
 
-%figure(1)
-%subplot(1,5,1), imagesc(irr1), axis image, colormap default
-%subplot(1,5,2), imagesc(irr2), axis image, colormap default
-%subplot(1,5,3), imagesc(irr3), axis image, colormap default
-%subplot(1,5,4), imagesc(irr4), axis image, colormap default
-%subplot(1,5,5), imagesc(irr5), axis image, colormap default
+figure(1)
+subplot(1,5,1), imagesc(irr1), axis image, colormap jet
+subplot(1,5,2), imagesc(irr2), axis image, colormap jet
+subplot(1,5,3), imagesc(irr3), axis image, colormap jet
+subplot(1,5,4), imagesc(irr4), axis image, colormap jet
+subplot(1,5,5), imagesc(irr5), axis image, colormap jet
 
-
-%% Response function estimation
-
-%hdr_gsolve = makehdr_gsolve(ldrs,exps);
-%figure(1), imagesc(hdr_gsolve), axis image, colormap default;
 
 %% Graphing
 
@@ -97,19 +106,24 @@ end
 %figure(2),imagesc(naive_hdr), axis image, colormap default
 %figure(3),imagesc(selective_hdr), axis image, colormap default
 
-% equirectangular = mirrorball2latlon(naive_hdr);
-% figure(3),imagesc(equirectangular), axis image, colormap default
-% imwrite(equirectangular, './results/equirectangular.jpg');
+equirectangular = mirrorball2latlon(gsolve_hdr);
+equirectangular(equirectangular< 0) = 0;
+figure(3),imagesc(equirectangular), axis image, colormap default
+hdrwrite(equirectangular, './results/equirectangular.hdr');
+imwrite(tonemap(equirectangular), './results/equirectangular.jpg');
 
-%cubemap = mirrorball2cubemap(naive_hdr);
-%figure(4),imagesc(cubemap), axis image, colormap default
-%imwrite(cubemap, './results/cubemap.jpg');
+cubemap = mirrorball2cubemap(gsolve_hdr);
+cubemap(~isfinite(cubemap)) = 1;
+figure(4),imagesc(cubemap), axis image, colormap default
+hdrwrite(cubemap, './results/cubemap.hdr');
+imwrite(tonemap(cubemap), './results/cubemap.jpg');
 
 % cubemap = latlon2cubemap();
 % figure(4),imagesc(cubemap), axis image, colormap default
 % imwrite(cubemap, './results/cubemap.jpg');
 
-% angular = mirrorball2angular(naive_hdr);
-% figure(4),imagesc(angular), axis image, colormap default
-% imwrite(angular, './results/angular.jpg');
+angular = mirrorball2angular(gsolve_hdr);
+figure(4),imagesc(angular), axis image, colormap default
+hdrwrite(angular, './results/angular.hdr');
+imwrite(tonemap(angular), './results/angular.jpg');
 

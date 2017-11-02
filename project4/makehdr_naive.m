@@ -12,11 +12,5 @@ function hdr = makehdr_naive(ldrs, exps)
     
     % Mean ldrs
     hdr = mean(ldrs, 4);
-    
-    % Rescale
-    hdr(:,:,1) = 255 * mat2gray(hdr(:,:,1));
-    hdr(:,:,2) = 255 * mat2gray(hdr(:,:,2));
-    hdr(:,:,3) = 255 * mat2gray(hdr(:,:,3));
-    hdr = uint8(hdr);
-    
+   
 end

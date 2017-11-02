@@ -1,7 +1,7 @@
 function latlon = mirrorball2latlon( mirrorball_hdr )
 %MIRRORBALL2LATLON Converts a mirrorball image to an equilateral projection
     offset1 = pi/2; % offset used later to center image
-    offset2 = -pi;
+    offset2 = 0;
     cmap = parula(256);
 
     mirrorball_hdr = im2double(mirrorball_hdr);

@@ -11,20 +11,20 @@ colormap(parula);
 % 
 % ldrs = cat(4, ldr1, ldr2, ldr3, ldr4, ldr5);
 
-ldr1 = im2uint8(imread('./samples/new/2.jpg'));
-ldr2 = im2uint8(imread('./samples/new/4.jpg'));
-ldr3 = im2uint8(imread('./samples/new/8.jpg'));
-ldr4 = im2uint8(imread('./samples/new/15.jpg'));
-ldr5 = im2uint8(imread('./samples/new/30.jpg'));
-exps = [2 4 8 15 30];
+% ldr1 = im2uint8(imread('./samples/new/2.jpg'));
+% ldr2 = im2uint8(imread('./samples/new/4.jpg'));
+% ldr3 = im2uint8(imread('./samples/new/8.jpg'));
+% ldr4 = im2uint8(imread('./samples/new/15.jpg'));
+% ldr5 = im2uint8(imread('./samples/new/30.jpg'));
+% exps = [2 4 8 15 30];
 
-% ldr1 = im2uint8(imread('./samples/angle1/1:30.jpg'));
-% ldr2 = im2uint8(imread('./samples/angle1/1:15.jpg'));
-% ldr3 = im2uint8(imread('./samples/angle1/1:8.jpg'));
-% ldr4 = im2uint8(imread('./samples/angle1/1:4.jpg'));
-% ldr5 = im2uint8(imread('./samples/angle1/1:2.jpg'));
+ldr1 = im2uint8(imread('./samples/angle1/1:30.jpg'));
+ldr2 = im2uint8(imread('./samples/angle1/1:15.jpg'));
+ldr3 = im2uint8(imread('./samples/angle1/1:8.jpg'));
+ldr4 = im2uint8(imread('./samples/angle1/1:4.jpg'));
+ldr5 = im2uint8(imread('./samples/angle1/1:2.jpg'));
 
-% exps = [1/30 1/15 1/8 1/4 1/2];
+exps = [1/30 1/15 1/8 1/4 1/2];
 
 ldrs = cat(4, ldr1, ldr2, ldr3, ldr4, ldr5);
 
@@ -47,7 +47,8 @@ figure(3),imagesc(gsolve_hdr), axis image, colormap default
 hdrwrite(gsolve_hdr, './results/gsolve_hdr.hdr');
 imwrite(tonemap(gsolve_hdr), './results/gsolve_hdr.jpg');
 
-xxxxxxxxxxxxxxxx=======
+%% Irradiance scaling
+
 irr1 = irradiance(ldr1, exps(1));
 irr2 = irradiance(ldr2, exps(2));
 irr3 = irradiance(ldr3, exps(3));
@@ -59,10 +60,6 @@ irr7 = irradiance(selective_hdr,1);
 irr8 = irradiance(gsolve_hdr, 1);
 
 irrs = cat(4,irr1,irr2,irr3,irr4,irr5);
-
-naive_irr = scale_irradiance(irrs,irr6);
-selective_irr = scale_irradiance(irrs,irr7);
-gsolve_irr = scale_irradiance(irrs,irr8);
 
 %filter out -inf values from log(0)g
 irr1_filtered = irr1 .* ~isinf(irr1);
@@ -101,6 +98,17 @@ for r = 1:y
         end
     end 
 end
+imwrite(irr1, './results/irr1.jpg');
+imwrite(irr2, './results/irr2.jpg');
+imwrite(irr3, './results/irr3.jpg');
+imwrite(irr4, './results/irr4.jpg');
+imwrite(irr5, './results/irr5.jpg');
+naive_irr = scale_irradiance(irr6,min_val,max_val);
+imwrite(naive_irr, './results/naive_irr.jpg');
+selective_irr = scale_irradiance(irr7,min_val,max_val);
+imwrite(selective_irr, './results/selective_irr.jpg');
+gsolve_irr = scale_irradiance(irr8,min_val,max_val);
+imwrite(gsolve_irr, './results/gsolve_irr.jpg');
 
 figure(1)
 subplot(1,5,1), imagesc(irr1), axis image, colormap jet
@@ -114,21 +122,6 @@ subplot(1,3,1), imagesc(naive_irr), axis image, colormap jet
 subplot(1,3,2), imagesc(selective_irr), axis image, colormap jet
 subplot(1,3,3), imagesc(gsolve_irr), axis image, colormap jet
 
-
-
-
-%% Graphing
-
-%figure(1)
-%subplot(1,5,1), imagesc(ldr1), axis image, colormap default
-%subplot(1,5,2), imagesc(ldr2), axis image, colormap default
-%subplot(1,5,3), imagesc(ldr3), axis image, colormap default
-%subplot(1,5,4), imagesc(ldr4), axis image, colormap default
-%subplot(1,5,5), imagesc(ldr5), axis image, colormap default
-
-%figure(2),imagesc(naive_hdr), axis image, colormap default
-%figure(3),imagesc(selective_hdr), axis image, colormap default
->>>>>>> 6996fdca40de1f5ab234a53125089ff93f113240
 
 % equirectangular = mirrorball2latlon(gsolve_hdr);
 % equirectangular(equirectangular< 0) = 0;

@@ -1,0 +1,28 @@
+function [ out ]  = scale_irradiance(irrs, hdr)
+
+%add hdr
+irrs = cat(4,irrs,hdr);
+
+num_images = size(irrs,4);
+
+mins = zeros(1,num_images);
+maxs = zeros(1,num_images);
+
+%remove -inf values
+irrs = irrs .* ~isinf(irrs);
+
+for i = 1:num_images
+    irr = irrs(:,:,:,i);
+    mins(i) = min(irr(:));
+    maxs(i) = max(irr(:));
+end
+
+global_min = min(mins);
+global_max = max(maxs);
+
+
+out = (hdr - min_val)/(max-v
+for i = 1:num_images
+            irr1(r,c,d) = (irr1(r,c,d) - min_val) / (max_val-min_val);
+end
+

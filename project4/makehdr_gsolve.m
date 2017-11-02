@@ -1,4 +1,4 @@
-function [ hdr_irr ] = makehdr_gsolve(ldrs,exps)
+function [ hdr_irr_scaled , hdr_irr] = makehdr_gsolve(ldrs,exps)
 % Find the response function and create hdr image
 % g(Z) = ln(t) + ln(R)
 
@@ -6,13 +6,6 @@ function [ hdr_irr ] = makehdr_gsolve(ldrs,exps)
 
 hdr = zeros(rows,cols,dim,'uint8');
 num_images = size(ldrs,4);
-
-ldrs_scaled = im2double(ldrs);
-
-% Scaling into same intensity domain
-for i = 1:num_images
-    ldrs_scaled(:,:,:,i) = (ldrs_scaled(:,:,:,i))./exps(i);
-end
 
 %randomly sample pixels
 n = 200;
@@ -52,15 +45,15 @@ for d = 1:3
                 numer = numer + w(z)*(g(z+1) - B(j));   
                 denom = denom + w(z);
             end
-            hdr_irr(r,c, d) = numer/denom;
-%             [~, index] = min(abs(g-hdr_irr(r,c, d)));
-%             hdr(r,c,d) = index-1;
+            hdr_irr(r,c,d) = numer/denom;
+%           [~, index] = min(abs(g-hdr_irr(r,c, d)));
+%           hdr(r,c,d) = index-1;
         end
     end
-    I = hdr_irr(:,:, d);
+    I = hdr_irr(:,:,d);
     minel = min(I(:));
     offsetI = I-minel;
-    hdr_irr(:,:,d) = offsetI/max(offsetI(:));
+    hdr_irr_scaled(:,:,d) = offsetI/max(offsetI(:));
 %     I = double(hdr(:,:, d));
 %     minel = min(I(:));
 %     offsetI = I-minel;

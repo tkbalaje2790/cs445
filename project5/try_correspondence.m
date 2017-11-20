@@ -6,22 +6,22 @@ vl_setup;
 
 
 master_frames=[90   270   450   630   810];
-reference_frame=450;
+%reference_frame=450;
 
 %%
 I=imread(sprintf('frames/f%04d.jpg',reference_frame));
 [f,d] = vl_sift(single(rgb2gray(I)));
 sel  = randperm(size(f,2),50);
 
-figure(1); clf ;
-imshow(I)
+%figure(1); clf ;
+%imshow(I)
 h1   = vl_plotframe(f(:,sel)) ; set(h1,'color','k','linewidth',4) ;
 h2   = vl_plotframe(f(:,sel)) ; set(h2,'color','y','linewidth',2) ;
 
 
 %%
-Ia=imread(sprintf('frames/f%04d.jpg',master_frames(projection_idx)));
-Ib=imread(sprintf('frames/f%04d.jpg',master_frames(reference_idx)));
+Ia=imread(sprintf('frames/f%04d.jpg',projection_frame));
+Ib=imread(sprintf('frames/f%04d.jpg',reference_frame));
 
 
 [fa,da] = vl_sift(im2single(rgb2gray(Ia))) ;
@@ -33,8 +33,8 @@ Ib=imread(sprintf('frames/f%04d.jpg',master_frames(reference_idx)));
 matches = matches(:, perm) ;
 scores  = scores(perm) ;
 
-figure(2) ; clf ;
-imagesc(cat(2, Ia, Ib)) ;
+%figure(2) ; clf ;
+%imagesc(cat(2, Ia, Ib)) ;
 
 xa = fa(1,matches(1,:)) ;
 xb = fb(1,matches(2,:)) + size(Ia,2) ;

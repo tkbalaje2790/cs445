@@ -106,4 +106,4 @@ h = V(:, end);
 H_n = reshape(h, [3, 3]);
 
 %unnormalize
-H = inv(T2)*H_n*T1;
+H = T2\H_n*T1;

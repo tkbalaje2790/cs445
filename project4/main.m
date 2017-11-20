@@ -11,12 +11,12 @@ colormap(parula);
 % 
 % ldrs = cat(4, ldr1, ldr2, ldr3, ldr4, ldr5);
 
-% ldr1 = im2uint8(imread('./samples/new/2.jpg'));
-% ldr2 = im2uint8(imread('./samples/new/4.jpg'));
-% ldr3 = im2uint8(imread('./samples/new/8.jpg'));
-% ldr4 = im2uint8(imread('./samples/new/15.jpg'));
-% ldr5 = im2uint8(imread('./samples/new/30.jpg'));
-% exps = [2 4 8 15 30];
+%ldr1 = im2uint8(imread('./samples/new/2.jpg'));
+%ldr2 = im2uint8(imread('./samples/new/4.jpg'));
+%ldr3 = im2uint8(imread('./samples/new/8.jpg'));
+%ldr4 = im2uint8(imread('./samples/new/15.jpg'));
+%ldr5 = im2uint8(imread('./samples/new/30.jpg'));
+%exps = [2 4 8 15 30];
 
 % ldr1 = im2uint8(imread('./samples/angle1/1:30.jpg'));
 % ldr2 = im2uint8(imread('./samples/angle1/1:15.jpg'));

@@ -61,5 +61,5 @@ end
 hdr_irr = exp(hdr_irr);    
 cmap = jet(256);
 I =255*mat2gray(mean(hdr_irr,3));
-imwrite(I, cmap, './results/irradiance_map.jpg');
+%imwrite(I, cmap, './results/irradiance_map.jpg');
 figure(7), imagesc(I), axis image, colormap parula

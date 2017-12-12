@@ -1,0 +1,357 @@
+
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title></title>
+	<style type="text/css">div {
+    padding: 20;
+    text-align: center;
+}
+	</style>
+	<!-- Latest compiled and minified CSS -->
+	<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" rel="stylesheet" /><!-- Optional theme -->
+	<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" rel="stylesheet" /><!-- Latest compiled and minified JavaScript --><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0" /><meta http-equiv="cache-control" content="max-age=0" /><meta http-equiv="expires" content="0" /><meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" /><meta http-equiv="pragma" content="no-cache" />
+</head>
+<body>
+<div class="container">
+<h1 style="text-align: left;"><span style="font-size:36px;">Project 4: Image Based Lighting</span></h1>
+
+<p style="text-align: left;"><span style="font-size:36px;">by Jonathan Reynolds and Vishrut Dixit</span></p>
+
+<p style="text-align: left;"><span style="font-size:12px;">Note: All images not credited are mine, sample&nbsp;images given, or in the public domain.</span></p>
+
+<h2 style="text-align: left;">LDR Merging:</h2>
+
+<p style="text-align: left;">This part of the project involves merging several different exposures of the same scene together into a single HDR image. With an HDR image, one can store a&nbsp;much greater range of light intensities than one can with single exposure since each exposure allows light&nbsp;into the camera for a varying amounts of time. Short exposures&nbsp;are more suited to capturing&nbsp;high-intensity lighting, while long exposures will capture&nbsp;low-intensity light details. Below are 5 different irradiance images, one for each exposure we&#39;d like to use in our final HDR image.</p>
+
+<p style="text-align: left;">Please note that all irradiance images shown in this project are scaled based on the minimum and maximum intensities&nbsp;represented by the 5 exposures below.</p>
+
+<div class="row">
+<div class="col-xs-2 col-xs-offset-1" style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/irr1.jpg" style="width: 100%; display: inline-block;" /></p>
+
+<p style="text-align: left;">Irradiance image for 2s exposure</p>
+</div>
+
+<div class="col-xs-2" style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/irr2.jpg" style="width: 100%; display: inline-block;" /></p>
+
+<p style="text-align: left;">Irradiance image for 4s exposure</p>
+</div>
+
+<div class="col-xs-2" style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/irr3.jpg" style="width: 100%; display: inline-block;" /></p>
+
+<p style="text-align: left;">Irradiance image for 8s exposure</p>
+</div>
+
+<div class="col-xs-2" style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/irr4.jpg" style="width: 100%; display: inline-block;" /></p>
+
+<p style="text-align: left;">Irradiance image for 15s exposure</p>
+</div>
+
+<div class="col-xs-2" style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/irr5.jpg" style="width: 100%; display: inline-block;" /></p>
+
+<p style="text-align: left;">Irradiance image for 30s exposure</p>
+</div>
+</div>
+
+<h3 style="text-align: left;">Naive Merging:</h3>
+
+<p style="text-align: left;">Below is the result of averaging the 5 LDR images.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/naive_irr.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p>Irradiance for naive merged HDR</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/naive_hdr.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p>Tonemapped HDR</p>
+</div>
+
+<p style="text-align: left;">The irradiance image&nbsp;for the naive merged HDR is probably so dark because many parts of the picture have low-light intensities, but the scale varies from low to extremely high light intensities, leaving a majority of the image at the low end of the scale. This seems to be true since the only non-black parts of the image can be seen wherever there are lights in the scene.</p>
+
+<h3 style="text-align: left;">Weighted Merging:</h3>
+
+<p style="text-align: left;">Below is the result of a weighted average of the 5 LDR images. In order to perform the weighted average, we weighed pixel values with higher or lower values less and pixel values with middle values more.</p>
+
+<div style="display:inline-block;"></div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/selective_irr.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p>Irradiance for weighted merged&nbsp;HDR</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/selective_hdr.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p>Tonemapped&nbsp;HDR</p>
+</div>
+
+<p style="text-align: left;">This ends up creating an irradiance image much closer to the middle exposure, which is to be expected. By weighing middle values higher than low and high values, we end up with a an irradiance image with values&nbsp;around the middle of our scale. However, locations in the image where the pixel values are always high (such as at light sources) show a solid-color as a result of the weighing function. As a result,&nbsp;detail is lost in these areas.</p>
+
+<h3 style="text-align: left;">Response Function Merging:</h3>
+
+<p style="text-align: left;">Below is the result of recovering the HDR image from estimating the film response function of our camera as described in <a href="http://www.pauldebevec.com/Research/HDR/debevec-siggraph97.pdf">this paper.</a></p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/gsolve_irr.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Irradiance for&nbsp;HDR from response function</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/gsolve_hdr.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Tonemapped HDR</p>
+</div>
+
+<p><img alt="" src="/cs445/proj4/results/g(z)_vs_z.png" style="width: 400px; height: 300px;" /></p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;">g(z) vs. z for R, G, and B channels</p>
+</div>
+
+<p style="text-align: left;"></p>
+
+<p style="text-align: left;">Notice that this irradiance image captures values across the entire scale, which is why it resembles none of the 5 exposure irradiance images. By using the response function, <tt>g</tt>, we can find the relative radiance values of an arbitrary pixel across the 5 exposures. Weighing these relative radiance values, we can diminish the influence of oversaturated parts of the image&nbsp;and create a merged HDR image that reflects a combination of all 5 exposures. This looks different than the other merged HDR images because we are now getting a more accurate representation of the scene&#39;s relative radiance across the image.</p>
+
+<h2 style="text-align: left;">Panoramic projections:</h2>
+
+<p style="text-align: left;">In order to transform our mirrorball image into different, more widely used formats for environment mapping, we can create a number of panoramic projections. In order to perform transformations from one projection to another, we need to calculate the coordinates corresponding to the originating light position for each pixel on the mirrorball. Once we know where in the scene the light originated, we can map the environment to a number of other projections.&nbsp;</p>
+
+<p style="text-align: left;">In order to do this, we&#39;ll use the physical properties of light and our mirrorball. Since the mirrorball is spherical, we can calculate the normals of the mirrorball quickly using our knowledge of spheres. The normal vector on the surface of a sphere points directly away from the center of the sphere, so it&#39;s in the same direction as the position vector. We calculate the position of each point on surface of the mirrorball by first creating an <code>X</code> image and <code>Y</code> image of the sphere. For now, let the&nbsp;<em>x</em>-axis run along the horizontal axis of the image and the <em>y</em>-axis&nbsp;run&nbsp;along the vertical axis of the image.&nbsp;Then we calculate <code>Z = sqrt(1 - (X .* X + Y .* Y))</code>. Finally, we combine the coordinates into&nbsp;a normal image <code>N</code> with <code>N = cat(4, X, Y, Z)</code>.&nbsp;</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/normal_mb.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p>Normal&nbsp;image (R = X, G = Y, B = Z)</p>
+</div>
+
+<p style="text-align: left;">Next, we use our normal image to calculate how our gaze is reflected off of the mirrorball and into the environment. We can calculate the reflection image <code>R</code> with <code>R =&nbsp;V - 2 .* dot(V,N) .* N</code>. In this case, we&#39;ll assume an orthographic view with a uniform <code>{0, 0, -1}</code> gaze direction at every pixel in the <code>V</code> image. Moreover, since <code>{0, 0, -1} &bull; {x, y, z} = -z</code>, this means&nbsp;we can simplify our equation for R as <code>R = V - repmat(2 .* -Z, 1, 1, 1, 3) .* N</code>. See the result below.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/reflection_mb.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Reflection image (R =&nbsp;X, G = Y, B = Z)</p>
+</div>
+
+<p style="text-align: left;">Now that we have the reflection image, we can convert from cartesian directional coordinates to spherical directional coordinates. At this point, we swap our convention for Y and Z, such that Y now points along our gaze direction, and Z points along the vertical axis of the image. In other words, <code>X= R(:,:,1)</code>, but&nbsp;<code>Z = R(:,:,2)</code> and <code>Y = R(:,:,3)</code>. With this defined, we calculate spherical coordinates as&nbsp;<code>phi = atan2(Y, X)</code> and&nbsp;<code>theta&nbsp;= acos(Z)</code>. This generates&nbsp;the two images below.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/phi_mb.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Phi image of mirrorball</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/theta_mb.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Theta image of mirrorball</p>
+</div>
+
+<p style="text-align: left;">Finally, we create phi and theta images for the equirectangular image as well. Since the latitude and longitude change uniformly&nbsp;in an equirectangular image, these are simple to create.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/phi_eq.jpg" style="width: 399px; height: 200px;" /></p>
+
+<p style="text-align: left;">Phi of equirectangular</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/theta_eq.jpg" style="width: 399px; height: 200px;" /></p>
+
+<p style="text-align: left;">Theta of mirrorball</p>
+</div>
+
+<p style="text-align: left;">Finally, we interpolate the mirrorball HDR image values&nbsp;by the phi and theta values at each pixel. Through interpolation, we&#39;re able to generate the&nbsp;final equirectangular image&nbsp;below.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/equirectangular_rot.jpg" style="width: 600px; height: 300px;" /></p>
+
+<p style="text-align: left;">Tonemapped equirectangular image created from&nbsp;HDR mirroball</p>
+</div>
+
+<h2 style="text-align: left;">Image Based Lighting:</h2>
+
+<p style="text-align: left;">In this section, we use our equirectangular HDR images as environment maps in a virtual 3D scene. By doing this, we can simulate the lighting condition of&nbsp;the environment the HDR was taken in. Then we render 3D objects with this environment map, and we perform compositing to simulate their presence in an image.</p>
+
+<h3 style="text-align: left;">Example 1:</h3>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/samples/new/background.resized.jpg" style="width: 800px; height: 451px;" /></p>
+
+<p style="text-align: left;">Background image</p>
+</div>
+
+<p style="text-align: left;"></p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/rendered_chair.png" style="width: 400px; height: 225px;" /></p>
+
+<p style="text-align: left;">Rendered image with objects</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/plane_chair.png" style="width: 400px; height: 225px;" /></p>
+
+<p style="text-align: left;">Rendered image without objects</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/mask_chair.png" style="width: 400px; height: 225px;" /></p>
+
+<p style="text-align: left;">Object mask</p>
+</div>
+
+<p></p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/composite_chair.jpg" style="width: 800px; height: 450px;" /></p>
+
+<p style="text-align: left;">Final composite</p>
+</div>
+
+<p style="text-align: left;">Example 2:</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results1/background.resized.jpg" style="width: 800px; height: 450px;" /></p>
+
+<p style="text-align: left;">Background image</p>
+</div>
+
+<p style="text-align: left;"></p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results1/rendered_glossy.png" style="width: 400px; height: 225px;" /></p>
+
+<p style="text-align: left;">Rendered image with glossy plane</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results1/plane_glossy.png" style="width: 400px; height: 225px;" /></p>
+
+<p style="text-align: left;">Rendered image with glossy table without objects</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results1/mask_glossy.png" style="width: 400px; height: 225px;" /></p>
+
+<p style="text-align: left;">Object mask</p>
+</div>
+
+<p></p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results1/composite_table.jpg" style="width: 800px; height: 450px;" /></p>
+
+<p style="text-align: left;">Final composite</p>
+</div>
+
+<p></p>
+
+<h1 style="text-align: left;">Bells and Whistles:</h1>
+
+<h2 style="text-align: left;">Other projective transformations:</h2>
+
+<p style="text-align: left;">In order to create other environment mappings, we can find the phi and theta images for other projections besides equirectangular, and use similar interpolation techniques for generating a final projection image.</p>
+
+<h3 style="text-align: left;">Mirrorball to cubemap:</h3>
+
+<p style="text-align: left;">First, we generate our phi and theta images for the mirrorball, following the same steps as earlier.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"></p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/phi_mb.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Phi of mirrorball</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/theta_mb.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Theta of mirrorball</p>
+</div>
+
+<p style="text-align: left;">Then, we seek to find the phi and theta coordinates for the cubemap. In order to do this, we first must ask ourselves how the light from a surrounding scene would be projected onto a cube. Assuming a very large scene, the position vector at each point on the cube should indicate the&nbsp;direction of incoming light. Therefore, we can generate a position image for&nbsp;the cube, and we&#39;ll let this act as the light direction image for the cube as well.&nbsp;</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/normal_cm.jpg" style="width: 300px; height: 400px;" /></p>
+
+<p style="text-align: left;">Light direction&nbsp;image (R = X, G = Y, B = Z)</p>
+</div>
+
+<p style="text-align: left;">Once we know the light direction for each pixel in the cubemap, we create convert to spherical coordinates to generate the following phi and theta images.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/phi_cm.jpg" style="width: 300px; height: 400px;" /></p>
+
+<p style="text-align: left;">Phi of cubemap</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/theta_cm.jpg" style="width: 300px; height: 400px;" /></p>
+
+<p style="text-align: left;">Theta of cubemap</p>
+</div>
+
+<p style="text-align: left;">Finally, we&nbsp;use interpolation with respect to phi and theta to create the final cubemap projected image&nbsp;below.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/cubemap.jpg" style="width: 300px; height: 400px;" /></p>
+
+<p style="text-align: left;">Tonemapped cubemap projection of&nbsp;HDR image</p>
+</div>
+
+<h3 style="text-align: left;">Mirrorball to angular projection:</h3>
+
+<p style="text-align: left;">This is also as simple as finding the phi and theta image for an angular projection. First we calculate the phi and theta images for the mirrorball, but this time we do it a bit differently. In order to ensure that the focus of the image is at the center of the mirrorball, we allow the <em>z</em>-axis to point along the view direction and the <em>y</em>-axis to point along the vertical axis of the image, similar to our original convention. When calculating <code>phi = atan2(Y, X)</code> and&nbsp;<code>theta&nbsp;= acos(Z)</code>&nbsp;with this new convention, we yield the following images:</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"></p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/phi_mb_ang.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Phi of mirrorball</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/theta_mb_ang.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Theta of mirrorball</p>
+</div>
+
+<p style="text-align: left;">Now we need to calculate the phi and theta images of an angular projection. First we calculate the polar coordinate images of a circle. We can perform this very easily by calculating&nbsp;<code>phi = atan2(Y, X)</code> and <code>R = sqrt(X .* X + Y .* Y)</code>. Let phi remain unchanged, and let <code>theta&nbsp;= pi * R</code>. Now we see that along all radii of the circle, theta varies from 0 to 180 degrees, which means we&#39;ll create a max-angle fisheye/angular projection from these images.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/phi_ang.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Phi of cubemap</p>
+</div>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/figures/theta_ang.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Theta of cubemap</p>
+</div>
+
+<p style="text-align: left;">Finally, we&nbsp;use interpolation with respect to phi and theta to create the final angular projected image below.</p>
+
+<div style="display:inline-block;">
+<p style="text-align: left;"><img alt="" src="/cs445/proj4/results/angular.jpg" style="width: 300px; height: 300px;" /></p>
+
+<p style="text-align: left;">Tonemapped angular projection of HDR image</p>
+</div>
+</div>
+</body>
+</html>
